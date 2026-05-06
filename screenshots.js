@@ -60,12 +60,36 @@ const context = await browser.newContext({
 const page = await context.newPage();
 
 console.log(`→ ${APP_URL}/sign-in`);
-await page.goto(`${APP_URL}/sign-in`);
+await page.goto(`${APP_URL}/sign-in`, { waitUntil: 'networkidle' });
 await page.fill('input[type="email"]', APP_EMAIL);
 await page.fill('input[type="password"]', APP_PASSWORD);
 await page.click('button[type="submit"]');
-await page.waitForURL(`${APP_URL}/`, { timeout: 15000 });
-console.log('✓ signed in');
+
+// Wait for either: navigation away from /sign-in (success) OR an error
+// banner appearing on the form (bad creds, MFA, etc.). Whichever fires
+// first wins so we get a meaningful error instead of a 15s timeout.
+const result = await Promise.race([
+  page
+    .waitForURL((url) => !url.pathname.startsWith('/sign-in'), { timeout: 30000 })
+    .then(() => 'navigated'),
+  page
+    .waitForSelector('[role="alert"]', { timeout: 30000 })
+    .then(() => 'alert'),
+]);
+
+if (result === 'alert') {
+  const msg = (await page.locator('[role="alert"]').first().textContent()) ?? '(no message)';
+  throw new Error(`Sign-in failed: ${msg.trim()}`);
+}
+
+// Confirm we landed somewhere authenticated (dashboard heading is a good
+// canary; falls back to any post-login route).
+try {
+  await page.waitForSelector('h1:has-text("Dashboard")', { timeout: 8000 });
+} catch {
+  console.warn(`  (signed in but didn't see Dashboard heading at ${page.url()})`);
+}
+console.log(`✓ signed in (now at ${page.url()})`);
 
 for (const p of PAGES) {
   const url = `${APP_URL}${p.path}`;
