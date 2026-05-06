@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Timekeeping — by Invenio Technologies</title>
+    <meta
+      name="description"
+      content="Timekeeping by Invenio Technologies — multi-node approval routing, field claim/release, badge reconciliation, and a payroll-ready labor export. One workspace for time, audit-tracked at every step."
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/" class="brand">
+        <img src="/brand/invenio-mark.svg" alt="" width="32" height="32" />
+        <span>
+          <span class="brand-name">Invenio Technologies</span>
+          <span class="brand-mark">Timekeeping</span>
+        </span>
+      </a>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#tour">Tour</a>
+        <a href="#stack">Stack</a>
+        <a href="#contact">Contact</a>
+        <a class="btn btn-primary" href="https://invenio-timekeeping.netlify.app">Open the app →</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">Invenio Technologies · Timekeeping</p>
+        <h1>Timesheet approvals without the email chains.</h1>
+        <p class="lede">
+          Multi-node approval routing, field claim/release, badge reconciliation, and a
+          payroll-ready labor export — on the same data, audit-tracked at every step.
+          Built for industrial crews where one timesheet might cross three subcontractors,
+          two approvers, and a payroll deadline.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary btn-lg" href="https://invenio-timekeeping.netlify.app">Open the live demo</a>
+          <a class="btn btn-outline btn-lg" href="#tour">See the pages</a>
+        </div>
+        <ul class="hero-bullets">
+          <li><strong>Multi-node approval flows</strong> — user, silo-role, or project-role approvers per node</li>
+          <li><strong>Field shell + claim model</strong> — admin creates open shells, foreman picks up</li>
+          <li><strong>Badge reconciliation</strong> as a parallel flow — never blocks the main approval</li>
+        </ul>
+      </div>
+      <div class="hero-shot">
+        <img src="/screenshots/dashboard.png" alt="Invenio Timekeeping Dashboard" />
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <section id="features" class="features">
+      <h2>What it does</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <h3>Setup</h3>
+          <p>
+            Multi-node approval flows, project + area trees, employee roster with
+            sub-history spans, task codes, CWPs, FCOs, subcontractors, role
+            assignments at silo and project scope.
+          </p>
+        </div>
+        <div class="feature">
+          <h3>Submission</h3>
+          <p>
+            Staff weekly grid (ST + OT, Mon–Sun, area / task / CWP / FCO per row).
+            Field shells with claim/release for foremen. Recall while in flight.
+            Resubmit only the rejected lines.
+          </p>
+        </div>
+        <div class="feature">
+          <h3>Approval &amp; reconciliation</h3>
+          <p>
+            Multi-node routing with optimistic-concurrency conflict detection.
+            Admin reassign and override. Badge reconciliation runs alongside the
+            main flow with explicit cascade on conflict.
+          </p>
+        </div>
+        <div class="feature">
+          <h3>Export &amp; audit</h3>
+          <p>
+            CSV / XLSX labor export ready for payroll. Append-only approval-actions
+            log with comment + actor + timestamp. Tenant-scoped notifications and
+            stall detection out of the box.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <section id="tour" class="tour">
+      <h2>The pages</h2>
+      <p class="section-lede">A walkthrough of every screen in the app.</p>
+
+      <article class="tour-page">
+        <div class="tour-text">
+          <span class="tour-tag">Overview</span>
+          <h3>Dashboard</h3>
+          <p>
+            Land here after sign-in. Five live KPI tiles — pending approvals, submitted
+            this week, approved this week, open field shells, drafts not yet submitted —
+            and a per-row pending-approvals list with one-click Approve, Reject (with
+            comment), or Reassign. Optimistic-concurrency conflicts surface as an info
+            banner so two approvers acting at once never corrupt the run.
+          </p>
+        </div>
+        <figure class="tour-shot">
+          <img src="/screenshots/dashboard.png" alt="Dashboard" />
+        </figure>
+      </article>
+
+      <article class="tour-page">
+        <div class="tour-text">
+          <span class="tour-tag">Setup</span>
+          <h3>Approval Flow Editor</h3>
+          <p>
+            Up to five sequential nodes per flow. Each node accepts approvers as
+            specific users, by silo role (foreman, timekeeper_admin), or by project
+            role — so structural changes to the org propagate without re-authoring
+            flows. Reorder nodes with up/down arrows; partial unique constraints
+            keep approver lists clean per branch.
+          </p>
+        </div>
+        <figure class="tour-shot">
+          <img src="/screenshots/flow-editor.png" alt="Approval flow editor" />
+        </figure>
+      </article>
+
+      <article class="tour-page">
+        <div class="tour-text">
+          <span class="tour-tag">Setup</span>
+          <h3>Projects &amp; Areas</h3>
+          <p>
+            Tenant-scoped project list with the area subtable inline. Projects show
+            attached approval flows and active subcontractors. Activation is a chip —
+            deactivate to hide from new submissions while preserving historical
+            attribution.
+          </p>
+        </div>
+        <figure class="tour-shot">
+          <img src="/screenshots/projects.png" alt="Projects and areas" />
+        </figure>
+      </article>
+
+      <article class="tour-page">
+        <div class="tour-text">
+          <span class="tour-tag">Setup</span>
+          <h3>Employees</h3>
+          <p>
+            Roster across all subcontractors. Subcontractor changes don't overwrite —
+            they open a new history span and close the previous one, so payroll knows
+            exactly which sub the hours belong to in any given week. Soft-delete
+            preserves attribution on past timesheets.
+          </p>
+        </div>
+        <figure class="tour-shot">
+          <img src="/screenshots/employees.png" alt="Employees" />
+        </figure>
+      </article>
+
+      <article class="tour-page">
+        <div class="tour-text">
+          <span class="tour-tag">Setup</span>
+          <h3>Codes &amp; Subcontractors</h3>
+          <p>
+            One screen, four tabs — task codes, CWPs (Construction Work Packages),
+            FCOs (Field Change Orders), and subcontractors. Each tab is a flat
+            tenant-scoped list with add / edit / soft-delete. External-id columns
+            keep round-trips with field-tracking systems clean.
+          </p>
+        </div>
+        <figure class="tour-shot">
+          <img src="/screenshots/codes.png" alt="Codes and subcontractors" />
+        </figure>
+      </article>
+
+      <article class="tour-page">
+        <div class="tour-text">
+          <span class="tour-tag">Submission</span>
+          <h3>Staff Timesheets</h3>
+          <p>
+            Weekly Mon–Sun grid. Rows are (area, task code, CWP, FCO) tuples, cells
+            are ST + OT with optional per-cell comments. Save does a true diff-sync
+            on the line set — no full-table rewrites. Recall while in review pulls
+            the timesheet back to draft so you can edit and resubmit.
+          </p>
+        </div>
+        <figure class="tour-shot">
+          <img src="/screenshots/my-timesheets.png" alt="Staff timesheets" />
+        </figure>
+      </article>
+
+      <article class="tour-page">
+        <div class="tour-text">
+          <span class="tour-tag">Submission</span>
+          <h3>Field Timesheets</h3>
+          <p>
+            Three sections — open shells (admin-created, awaiting a claimer),
+            timesheets you've claimed, and your past submissions. Claiming a shell
+            assigns it to you and flips it to draft. Release puts it back. The crew
+            grid only shows employees on the claimed sub, so foremen can't
+            accidentally book hours to the wrong company.
+          </p>
+        </div>
+        <figure class="tour-shot">
+          <img src="/screenshots/field-timesheets.png" alt="Field timesheets" />
+        </figure>
+      </article>
+
+      <article class="tour-page">
+        <div class="tour-text">
+          <span class="tour-tag">Approval</span>
+          <h3>Manage Timesheets (Admin)</h3>
+          <p>
+            Tenant-wide list with combinable filters — kind (staff or field), status,
+            project, subcontractor, date range. Click into any row to land in the
+            same editor the submitter used, with admin override actions exposed.
+          </p>
+        </div>
+        <figure class="tour-shot">
+          <img src="/screenshots/admin-timesheets.png" alt="Manage timesheets" />
+        </figure>
+      </article>
+
+      <article class="tour-page">
+        <div class="tour-text">
+          <span class="tour-tag">Reconciliation</span>
+          <h3>Badge Overrides</h3>
+          <p>
+            When timesheet hours don't match badge readings, an override opens its own
+            approval run — parallel to the main timesheet flow, never blocking it.
+            Resolution is canonical (timesheet wins or badge wins) with required
+            reason. Badge-canonical resolutions cascade: open parents flip to
+            rejected with HOURS_RECONCILED_TO_BADGE; already-approved parents
+            generate an audit event for tenant admins.
+          </p>
+        </div>
+        <figure class="tour-shot">
+          <img src="/screenshots/badges.png" alt="Badge overrides" />
+        </figure>
+      </article>
+
+      <article class="tour-page">
+        <div class="tour-text">
+          <span class="tour-tag">Reporting</span>
+          <h3>Labor Export</h3>
+          <p>
+            CSV or XLSX. Date range, status filter (default: submitted, in review,
+            approved), project + subcontractor narrowing. Each line expands into ST
+            and OT rows with full code context — area, task, CWP, FCO, sub, employee.
+            XLSX adds a Summary by Project sheet for quick payroll review.
+          </p>
+        </div>
+        <figure class="tour-shot">
+          <img src="/screenshots/exports.png" alt="Labor export" />
+        </figure>
+      </article>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <section id="stack" class="stack">
+      <h2>Built on</h2>
+      <p class="stack-lede">Type-safe, audited, modern.</p>
+      <div class="stack-grid">
+        <div class="stack-card">
+          <img src="https://cdn.simpleicons.org/react/61DAFB" alt="" loading="lazy" />
+          <div class="stack-name">React 18</div>
+          <div class="stack-caption">UI</div>
+        </div>
+        <div class="stack-card">
+          <img src="https://cdn.simpleicons.org/typescript/3178C6" alt="" loading="lazy" />
+          <div class="stack-name">TypeScript</div>
+          <div class="stack-caption">End-to-end types</div>
+        </div>
+        <div class="stack-card">
+          <img src="https://cdn.simpleicons.org/vite/646CFF" alt="" loading="lazy" />
+          <div class="stack-name">Vite</div>
+          <div class="stack-caption">Build &amp; dev</div>
+        </div>
+        <div class="stack-card">
+          <img src="https://cdn.simpleicons.org/supabase/3FCF8E" alt="" loading="lazy" />
+          <div class="stack-name">Supabase</div>
+          <div class="stack-caption">Auth, RLS, edge functions</div>
+        </div>
+        <div class="stack-card">
+          <img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="" loading="lazy" />
+          <div class="stack-name">PostgreSQL</div>
+          <div class="stack-caption">RLS, RPCs, pgTAP</div>
+        </div>
+        <div class="stack-card">
+          <img src="https://cdn.simpleicons.org/reactquery/FF4154" alt="" loading="lazy" />
+          <div class="stack-name">TanStack Query</div>
+          <div class="stack-caption">Data &amp; cache</div>
+        </div>
+        <div class="stack-card">
+          <img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="" loading="lazy" />
+          <div class="stack-name">Tailwind</div>
+          <div class="stack-caption">Design tokens</div>
+        </div>
+        <div class="stack-card">
+          <img src="https://cdn.simpleicons.org/deno/000000" alt="" loading="lazy" />
+          <div class="stack-name">Deno</div>
+          <div class="stack-caption">Edge functions</div>
+        </div>
+        <div class="stack-card">
+          <img src="https://cdn.simpleicons.org/playwright/2EAD33" alt="" loading="lazy" />
+          <div class="stack-name">Playwright</div>
+          <div class="stack-caption">E2E + screenshots</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────────────────── -->
+    <section id="contact" class="contact">
+      <div class="contact-inner">
+        <div class="contact-text">
+          <h2>Get in touch</h2>
+          <p class="section-lede">
+            Tell us about your crews and we'll set up a demo. Response within
+            one business day.
+          </p>
+          <ul class="contact-meta">
+            <li>
+              <span class="contact-label">Email</span>
+              <a href="mailto:info@invenio-tek.com">info@invenio-tek.com</a>
+            </li>
+            <li>
+              <span class="contact-label">Sales</span>
+              <a href="mailto:hello@invenio-tek.com">hello@invenio-tek.com</a>
+            </li>
+            <li>
+              <span class="contact-label">Based in</span>
+              <span>Houston, Texas</span>
+            </li>
+          </ul>
+        </div>
+        <form
+          name="contact"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          class="contact-form"
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="hp-field">
+            <label>Don't fill this out: <input name="bot-field" /></label>
+          </p>
+
+          <label>
+            <span>Name <span class="req">*</span></span>
+            <input type="text" name="name" required />
+          </label>
+
+          <label>
+            <span>Email <span class="req">*</span></span>
+            <input type="email" name="email" required />
+          </label>
+
+          <label>
+            <span>Company</span>
+            <input type="text" name="company" />
+          </label>
+
+          <label>
+            <span>Message <span class="req">*</span></span>
+            <textarea name="message" rows="4" required></textarea>
+          </label>
+
+          <button type="submit" class="btn btn-primary btn-lg">Send message</button>
+        </form>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div>© 2026 Invenio Technologies</div>
+      <div>
+        <a href="mailto:info@invenio-tek.com">info@invenio-tek.com</a>
+        ·
+        <a href="https://invenio-timekeeping.netlify.app">Live app</a>
+        ·
+        <a href="https://github.com/INVTKAI/TimeKeepingApp">Source</a>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+[build]
+  publish = "."
+  command = ""
+
+# Static site — no build step. Netlify just publishes index.html as-is.
